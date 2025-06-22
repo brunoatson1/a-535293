@@ -1,310 +1,382 @@
 
-import React from 'react';
-import { Search, Wrench, Star, TrendingUp, Phone, Mail, MapPin, Shield, Network, Monitor, Server, Smartphone } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { Shield, Monitor, Server, Network, Code, Cloud, Phone, Mail, MapPin, Star, CheckCircle, ArrowRight } from 'lucide-react';
+import WhatsAppButton from '@/components/WhatsAppButton';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
-  const handleWhatsApp = () => {
-    window.open('https://wa.me/5569993624434', '_blank');
-  };
+  const { toast } = useToast();
+  const [siteData, setSiteData] = useState({
+    hero: {
+      title: 'ATS Conect - Soluções em TI e Segurança Eletrônica',
+      subtitle: 'Suporte técnico especializado, desenvolvimento de sistemas e segurança eletrônica para empresas em Porto Velho - RO',
+      buttonText: 'Solicitar Orçamento'
+    },
+    company: {
+      name: 'ATS Conect',
+      whatsapp: '(69) 99362-4434',
+      email: 'atendimento@atsconect.com.br',
+      address: 'Porto Velho - Rondônia',
+      whatsappLink: 'https://wa.me/5569993624434'
+    },
+    theme: {
+      primaryColor: '#3b82f6',
+      secondaryColor: '#1e40af',
+      backgroundColor: '#0f172a',
+      textColor: '#f8fafc'
+    },
+    services: [
+      'Suporte e soluções em TI',
+      'Desenvolvimento de sistemas personalizados',
+      'Suporte a sistemas de segurança eletrônica (DVRs, câmeras IP)',
+      'Redes TCP/IP e configuração de roteadores',
+      'Desenvolvimento de programas e automações',
+      'Suporte a hospedagem de sites e sistemas em nuvem'
+    ],
+    about: 'A ATS Conect é uma empresa especializada em soluções de TI e segurança eletrônica, oferecendo atendimento exclusivo para empresas em Porto Velho e região. Nossa equipe técnica qualificada está pronta para atender suas necessidades tecnológicas.',
+    footer: 'ATS Conect - Soluções em TI e Segurança Eletrônica. Atendimento exclusivo para empresas.'
+  });
+
+  const [formData, setFormData] = useState({
+    nome: '',
+    email: '',
+    telefone: '',
+    mensagem: ''
+  });
+
+  useEffect(() => {
+    const savedData = localStorage.getItem('ats-site-data');
+    if (savedData) {
+      setSiteData(JSON.parse(savedData));
+    }
+
+    const handleSiteDataUpdate = (event) => {
+      setSiteData(event.detail);
+    };
+
+    window.addEventListener('siteDataUpdate', handleSiteDataUpdate);
+    return () => window.removeEventListener('siteDataUpdate', handleSiteDataUpdate);
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aqui você pode adicionar a lógica para enviar o formulário
-    alert('Formulário enviado! Entraremos em contato em breve.');
+    
+    // Simular envio do formulário
+    toast({
+      title: "Mensagem enviada com sucesso!",
+      description: "Entraremos em contato em breve.",
+    });
+    
+    setFormData({ nome: '', email: '', telefone: '', mensagem: '' });
   };
 
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const serviceIcons = [
+    <Monitor className="h-8 w-8" />,
+    <Code className="h-8 w-8" />,
+    <Shield className="h-8 w-8" />,
+    <Network className="h-8 w-8" />,
+    <Server className="h-8 w-8" />,
+    <Cloud className="h-8 w-8" />
+  ];
+
   return (
-    <div className="min-h-screen bg-white text-gray-900">
-      {/* Header */}
-      <header className="bg-blue-900 py-4 shadow-lg">
-        <div className="container mx-auto flex justify-between items-center px-4">
-          <div className="text-2xl font-bold text-white">ATS Conect</div>
-          <nav className="hidden md:block">
-            <ul className="flex space-x-6">
-              {['Início', 'Sobre', 'Serviços', 'Avaliações', 'Tecnologias', 'Blog', 'Contato'].map((item) => (
-                <li key={item}>
-                  <a href="#" className="text-gray-200 hover:text-blue-300 transition-colors">{item}</a>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          <div className="relative hidden lg:block">
-            <Input 
-              type="text" 
-              placeholder="Buscar serviços de TI" 
-              className="pl-10 pr-4 py-2 rounded-full bg-blue-800 text-white placeholder-gray-300 border-blue-700" 
-            />
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-300" size={18} />
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-blue-950 to-slate-950 text-white">
+      <style>
+        {`
+          :root {
+            --primary-color: ${siteData.theme.primaryColor};
+            --secondary-color: ${siteData.theme.secondaryColor};
+            --background-color: ${siteData.theme.backgroundColor};
+            --text-color: ${siteData.theme.textColor};
+          }
+        `}
+      </style>
+
+      {/* Navigation */}
+      <nav className="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="text-2xl font-bold text-blue-400">
+              {siteData.company.name}
+            </div>
+            <div className="hidden md:flex space-x-8">
+              <a href="#inicio" className="text-gray-300 hover:text-blue-400 transition-colors">Início</a>
+              <a href="#servicos" className="text-gray-300 hover:text-blue-400 transition-colors">Serviços</a>
+              <a href="#sobre" className="text-gray-300 hover:text-blue-400 transition-colors">Sobre</a>
+              <a href="#contato" className="text-gray-300 hover:text-blue-400 transition-colors">Contato</a>
+            </div>
+            <Button 
+              onClick={() => window.open(siteData.company.whatsappLink, '_blank')}
+              className="bg-green-600 hover:bg-green-700 text-white"
+            >
+              <Phone className="h-4 w-4 mr-2" />
+              WhatsApp
+            </Button>
           </div>
         </div>
-      </header>
+      </nav>
 
       {/* Hero Section */}
-      <section className="py-20 bg-gradient-to-r from-blue-900 via-blue-700 to-gray-800">
-        <div className="container mx-auto text-center px-4">
-          <div className="bg-blue-600 text-white px-6 py-2 rounded-full inline-block mb-6 font-semibold">
-            🏢 ATENDIMENTO EXCLUSIVO PARA EMPRESAS
-          </div>
-          <h1 className="text-5xl font-bold mb-6 text-white">
-            Soluções Completas em TI e Segurança Eletrônica
-          </h1>
-          <p className="text-xl mb-8 text-gray-200">
-            Suporte técnico especializado, desenvolvimento de sistemas e infraestrutura de TI para sua empresa
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button 
-              onClick={handleWhatsApp}
-              className="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-full text-lg"
-            >
-              💬 WhatsApp (69) 99362-4434
-            </Button>
-            <Button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg">
-              📧 Solicitar Orçamento
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* Serviços em Destaque */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">Nossos Serviços Especializados</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-shadow">
-              <Monitor className="text-blue-500 mb-6" size={56} />
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">Suporte Técnico em TI</h3>
-              <p className="text-gray-600 mb-6">Manutenção preventiva e corretiva de computadores, redes e sistemas empresariais.</p>
-              <Button variant="outline" className="text-blue-500 border-blue-500 hover:bg-blue-500 hover:text-white w-full">
-                Saiba Mais
-              </Button>
+      <section id="inicio" className="relative py-20 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-900/20 to-purple-900/20"></div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="text-center">
+            <div className="inline-block bg-blue-600/20 text-blue-300 px-4 py-2 rounded-full mb-6 border border-blue-600/30">
+              <Star className="h-4 w-4 inline mr-2" />
+              Atendimento Exclusivo para Empresas
             </div>
-            
-            <div className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-shadow">
-              <Shield className="text-green-500 mb-6" size={56} />
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">Segurança Eletrônica</h3>
-              <p className="text-gray-600 mb-6">Instalação e suporte para DVRs, câmeras IP e sistemas de monitoramento.</p>
-              <Button variant="outline" className="text-green-500 border-green-500 hover:bg-green-500 hover:text-white w-full">
-                Saiba Mais
+            <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent leading-tight">
+              {siteData.hero.title}
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed">
+              {siteData.hero.subtitle}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button 
+                onClick={() => document.getElementById('contato').scrollIntoView({ behavior: 'smooth' })}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg font-semibold transition-all hover:scale-105"
+              >
+                {siteData.hero.buttonText}
+                <ArrowRight className="h-5 w-5 ml-2" />
               </Button>
-            </div>
-            
-            <div className="bg-white rounded-lg p-8 shadow-lg hover:shadow-xl transition-shadow">
-              <Server className="text-purple-500 mb-6" size={56} />
-              <h3 className="text-2xl font-bold mb-4 text-gray-800">Desenvolvimento de Sistemas</h3>
-              <p className="text-gray-600 mb-6">Criação de sistemas personalizados e automações sob demanda para sua empresa.</p>
-              <Button variant="outline" className="text-purple-500 border-purple-500 hover:bg-purple-500 hover:text-white w-full">
-                Saiba Mais
+              <Button 
+                onClick={() => window.open(siteData.company.whatsappLink, '_blank')}
+                variant="outline" 
+                className="border-green-500 text-green-400 hover:bg-green-500 hover:text-white px-8 py-4 text-lg font-semibold transition-all hover:scale-105"
+              >
+                <Phone className="h-5 w-5 mr-2" />
+                {siteData.company.whatsapp}
               </Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Avaliações de Clientes */}
-      <section className="py-16 bg-white">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">O Que Nossos Clientes Dizem</h2>
-          <div className="flex space-x-8 overflow-x-auto pb-4">
-            {[
-              {
-                nome: "João Silva - CEO TechCorp",
-                avaliacao: "Excelente suporte técnico! A ATS Conect resolveu todos os problemas da nossa rede em tempo record.",
-                estrelas: 5
-              },
-              {
-                nome: "Maria Santos - Diretora Comercial",
-                avaliacao: "Sistema de segurança instalado com perfeição. Equipe muito profissional e atendimento exemplar.",
-                estrelas: 5
-              },
-              {
-                nome: "Carlos Oliveira - Gerente de TI",
-                avaliacao: "Desenvolvimento do nosso sistema ERP superou todas as expectativas. Recomendo fortemente!",
-                estrelas: 5
-              }
-            ].map((cliente, index) => (
-              <div key={index} className="bg-gray-50 rounded-lg p-6 min-w-[350px] shadow-md">
-                <div className="flex items-center mb-4">
-                  {[...Array(cliente.estrelas)].map((_, i) => (
-                    <Star key={i} className="text-yellow-400 fill-current mr-1" size={20} />
-                  ))}
-                  <span className="text-yellow-500 font-bold ml-2">{cliente.estrelas}.0/5</span>
-                </div>
-                <p className="text-gray-700 mb-4 italic">"{cliente.avaliacao}"</p>
-                <p className="font-semibold text-gray-800">- {cliente.nome}</p>
-              </div>
-            ))}
+      {/* Services Section */}
+      <section id="servicos" className="py-20 bg-slate-900/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-blue-400">Nossos Serviços</h2>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto">
+              Soluções completas em tecnologia para impulsionar o crescimento da sua empresa
+            </p>
           </div>
-        </div>
-      </section>
-
-      {/* Tecnologias e Tendências */}
-      <section className="py-16 bg-gray-50">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold mb-12 text-center text-gray-800">Tecnologias que Utilizamos</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              {
-                titulo: "Redes TCP/IP",
-                descricao: "Configuração e manutenção de redes corporativas, roteadores e switches.",
-                icone: Network
-              },
-              {
-                titulo: "Hospedagem de Sites",
-                descricao: "Suporte completo para hospedagem e manutenção de sites e sistemas web.",
-                icone: Server
-              },
-              {
-                titulo: "Sistemas Mobile",
-                descricao: "Desenvolvimento de aplicações móveis e integração com sistemas existentes.",
-                icone: Smartphone
-              }
-            ].map((tech, index) => (
-              <div key={index} className="bg-white rounded-lg p-8 shadow-md hover:shadow-lg transition-shadow">
-                <tech.icone className="text-blue-500 mb-4" size={40} />
-                <h3 className="text-xl font-bold mb-3 text-gray-800">{tech.titulo}</h3>
-                <p className="text-gray-600 mb-4">{tech.descricao}</p>
-                <Button variant="link" className="text-blue-500 hover:text-blue-700 p-0">
-                  Saiba Mais →
-                </Button>
-              </div>
+            {siteData.services.map((service, index) => (
+              <Card key={index} className="bg-slate-800/80 border-slate-700 hover:border-blue-500/50 transition-all duration-300 hover:scale-105 backdrop-blur-sm">
+                <CardHeader>
+                  <div className="text-blue-400 mb-2">
+                    {serviceIcons[index] || <Monitor className="h-8 w-8" />}
+                  </div>
+                  <CardTitle className="text-white text-lg">{service}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription className="text-gray-300">
+                    Soluções profissionais e personalizadas para sua empresa.
+                  </CardDescription>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Formulário de Contato */}
-      <section className="py-16 bg-blue-900">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <h2 className="text-4xl font-bold mb-12 text-center text-white">Entre em Contato</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              {/* Informações de Contato */}
-              <div className="text-white">
-                <h3 className="text-2xl font-bold mb-6">ATS Conect</h3>
-                <div className="space-y-4">
-                  <div className="flex items-center">
-                    <Phone className="mr-4" size={24} />
-                    <span className="text-lg">(69) 99362-4434</span>
-                  </div>
-                  <div className="flex items-center">
-                    <Mail className="mr-4" size={24} />
-                    <span className="text-lg">atendimento@atsconect.com.br</span>
-                  </div>
-                  <div className="flex items-center">
-                    <MapPin className="mr-4" size={24} />
-                    <span className="text-lg">Porto Velho - Rondônia</span>
-                  </div>
+      {/* About Section */}
+      <section id="sobre" className="py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-blue-400">Sobre a ATS Conect</h2>
+              <p className="text-lg text-gray-300 mb-6 leading-relaxed">
+                {siteData.about}
+              </p>
+              <div className="space-y-4">
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
+                  <span className="text-gray-300">Equipe técnica qualificada</span>
                 </div>
-                <div className="mt-8">
-                  <h4 className="text-xl font-semibold mb-4">Horário de Atendimento</h4>
-                  <p>Segunda a Sexta: 8h às 18h</p>
-                  <p>Sábado: 8h às 12h</p>
-                  <p className="text-blue-300 mt-2">Atendimento de emergência 24h</p>
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
+                  <span className="text-gray-300">Atendimento 24/7</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
+                  <span className="text-gray-300">Soluções personalizadas</span>
+                </div>
+                <div className="flex items-center">
+                  <CheckCircle className="h-5 w-5 text-green-400 mr-3" />
+                  <span className="text-gray-300">Suporte técnico especializado</span>
                 </div>
               </div>
+            </div>
+            <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 p-8 rounded-2xl border border-slate-700">
+              <div className="grid grid-cols-2 gap-6">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-400 mb-2">5+</div>
+                  <div className="text-gray-300">Anos de Experiência</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-400 mb-2">100+</div>
+                  <div className="text-gray-300">Clientes Atendidos</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-400 mb-2">24/7</div>
+                  <div className="text-gray-300">Suporte Técnico</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-400 mb-2">100%</div>
+                  <div className="text-gray-300">Satisfação</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-              {/* Formulário */}
-              <div className="bg-white rounded-lg p-8">
-                <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Contact Section */}
+      <section id="contato" className="py-20 bg-slate-900/50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-blue-400">Entre em Contato</h2>
+            <p className="text-xl text-gray-300">
+              Solicite um orçamento personalizado para sua empresa
+            </p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div>
+              <div className="space-y-6">
+                <div className="flex items-center">
+                  <Phone className="h-6 w-6 text-blue-400 mr-4" />
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">Nome Completo *</label>
-                    <Input type="text" required className="w-full" placeholder="Seu nome completo" />
+                    <div className="font-semibold text-white">Telefone</div>
+                    <div className="text-gray-300">{siteData.company.whatsapp}</div>
                   </div>
+                </div>
+                <div className="flex items-center">
+                  <Mail className="h-6 w-6 text-blue-400 mr-4" />
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">E-mail *</label>
-                    <Input type="email" required className="w-full" placeholder="seu@email.com" />
+                    <div className="font-semibold text-white">E-mail</div>
+                    <div className="text-gray-300">{siteData.company.email}</div>
                   </div>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="h-6 w-6 text-blue-400 mr-4" />
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">Telefone *</label>
-                    <Input type="tel" required className="w-full" placeholder="(69) 99999-9999" />
+                    <div className="font-semibold text-white">Localização</div>
+                    <div className="text-gray-300">{siteData.company.address}</div>
                   </div>
+                </div>
+              </div>
+            </div>
+            <Card className="bg-slate-800/80 border-slate-700 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-blue-400">Solicite um Orçamento</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
-                    <label className="block text-gray-700 font-semibold mb-2">Mensagem *</label>
-                    <Textarea 
-                      required 
-                      className="w-full h-32" 
-                      placeholder="Descreva sua necessidade ou problema técnico..."
+                    <Label className="text-gray-300">Nome</Label>
+                    <Input
+                      value={formData.nome}
+                      onChange={(e) => handleInputChange('nome', e.target.value)}
+                      className="bg-slate-700 border-slate-600 text-white"
+                      required
                     />
                   </div>
-                  <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3">
+                  <div>
+                    <Label className="text-gray-300">E-mail</Label>
+                    <Input
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => handleInputChange('email', e.target.value)}
+                      className="bg-slate-700 border-slate-600 text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">Telefone</Label>
+                    <Input
+                      value={formData.telefone}
+                      onChange={(e) => handleInputChange('telefone', e.target.value)}
+                      className="bg-slate-700 border-slate-600 text-white"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label className="text-gray-300">Mensagem</Label>
+                    <Textarea
+                      value={formData.mensagem}
+                      onChange={(e) => handleInputChange('mensagem', e.target.value)}
+                      className="bg-slate-700 border-slate-600 text-white min-h-24"
+                      placeholder="Descreva suas necessidades..."
+                      required
+                    />
+                  </div>
+                  <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white">
                     Enviar Mensagem
                   </Button>
                 </form>
-              </div>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 py-12 text-white">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <footer className="bg-slate-950 border-t border-slate-800 py-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
-              <h3 className="text-xl font-bold mb-4">ATS Conect</h3>
-              <p className="text-gray-400 mb-4">
-                Sua empresa de confiança para soluções completas em TI e segurança eletrônica.
-              </p>
-              <p className="text-sm text-gray-500">
-                Atendimento exclusivo para empresas
+              <h3 className="text-2xl font-bold text-blue-400 mb-4">{siteData.company.name}</h3>
+              <p className="text-gray-300 mb-4">
+                {siteData.footer}
               </p>
             </div>
-            
             <div>
-              <h3 className="text-xl font-bold mb-4">Serviços</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-blue-400">Suporte Técnico</a></li>
-                <li><a href="#" className="hover:text-blue-400">Segurança Eletrônica</a></li>
-                <li><a href="#" className="hover:text-blue-400">Desenvolvimento</a></li>
-                <li><a href="#" className="hover:text-blue-400">Redes e Infraestrutura</a></li>
+              <h4 className="text-lg font-semibold text-white mb-4">Serviços</h4>
+              <ul className="space-y-2">
+                {siteData.services.slice(0, 4).map((service, index) => (
+                  <li key={index} className="text-gray-300">{service}</li>
+                ))}
               </ul>
             </div>
-            
             <div>
-              <h3 className="text-xl font-bold mb-4">Links Úteis</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><a href="#" className="hover:text-blue-400">Política de Privacidade</a></li>
-                <li><a href="#" className="hover:text-blue-400">Termos de Serviço</a></li>
-                <li><a href="#" className="hover:text-blue-400">Suporte Técnico</a></li>
-                <li><a href="#" className="hover:text-blue-400">Emergência 24h</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="text-xl font-bold mb-4">Newsletter</h3>
-              <p className="text-gray-400 mb-4">Receba dicas de TI e novidades</p>
-              <div className="flex">
-                <Input 
-                  type="email" 
-                  placeholder="Seu e-mail" 
-                  className="rounded-l-lg border-gray-600 bg-gray-800 text-white" 
-                />
-                <Button className="bg-blue-600 hover:bg-blue-700 rounded-r-lg">
-                  Inscrever
-                </Button>
+              <h4 className="text-lg font-semibold text-white mb-4">Contato</h4>
+              <div className="space-y-2">
+                <div className="flex items-center text-gray-300">
+                  <Phone className="h-4 w-4 mr-2" />
+                  {siteData.company.whatsapp}
+                </div>
+                <div className="flex items-center text-gray-300">
+                  <Mail className="h-4 w-4 mr-2" />
+                  {siteData.company.email}
+                </div>
+                <div className="flex items-center text-gray-300">
+                  <MapPin className="h-4 w-4 mr-2" />
+                  {siteData.company.address}
+                </div>
               </div>
             </div>
           </div>
-          
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 ATS Conect. Todos os direitos reservados. | Porto Velho - RO</p>
+          <div className="border-t border-slate-800 mt-8 pt-8 text-center">
+            <p className="text-gray-400">
+              © 2024 {siteData.company.name}. Todos os direitos reservados.
+            </p>
           </div>
         </div>
       </footer>
 
-      {/* WhatsApp Button Fixo */}
-      <div className="fixed bottom-6 right-6 z-50">
-        <Button
-          onClick={handleWhatsApp}
-          className="bg-green-500 hover:bg-green-600 text-white rounded-full p-4 shadow-lg animate-pulse"
-          size="lg"
-        >
-          <Phone size={24} />
-        </Button>
-      </div>
+      {/* WhatsApp Button */}
+      <WhatsAppButton phoneNumber="5569993624434" />
     </div>
   );
 };

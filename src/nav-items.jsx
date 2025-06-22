@@ -1,6 +1,7 @@
 
-import { Home, Info, Wrench, Star, TrendingUp, BookOpen, Mail } from "lucide-react";
+import { Home, Info, Wrench, Star, TrendingUp, BookOpen, Mail, Settings } from "lucide-react";
 import Index from "./pages/Index.jsx";
+import Admin from "./pages/Admin.jsx";
 
 /**
  * Central place for defining the navigation items. Used for navigation components and routing.
@@ -47,5 +48,11 @@ export const navItems = [
     to: "/contato",
     icon: <Mail className="h-4 w-4" />,
     page: <div>Entre em Contato</div>,
+  },
+  {
+    title: "Admin",
+    to: "/admin",
+    icon: <Settings className="h-4 w-4" />,
+    page: <Admin />,
   },
 ];
