@@ -1,3 +1,4 @@
+
 import { Home, Info, Wrench, Star, TrendingUp, BookOpen, Mail } from "lucide-react";
 import Index from "./pages/Index.jsx";
 
@@ -6,45 +7,45 @@ import Index from "./pages/Index.jsx";
  */
 export const navItems = [
   {
-    title: "Home",
+    title: "Início",
     to: "/",
     icon: <Home className="h-4 w-4" />,
     page: <Index />,
   },
   {
-    title: "About",
-    to: "/about",
+    title: "Sobre",
+    to: "/sobre",
     icon: <Info className="h-4 w-4" />,
-    page: <div>About Page</div>,
+    page: <div>Página Sobre a ATS Conect</div>,
   },
   {
-    title: "Tools",
-    to: "/tools",
+    title: "Serviços",
+    to: "/servicos",
     icon: <Wrench className="h-4 w-4" />,
-    page: <div>Tools Page</div>,
+    page: <div>Nossos Serviços de TI</div>,
   },
   {
-    title: "Reviews",
-    to: "/reviews",
+    title: "Avaliações",
+    to: "/avaliacoes",
     icon: <Star className="h-4 w-4" />,
-    page: <div>Reviews Page</div>,
+    page: <div>Avaliações dos Clientes</div>,
   },
   {
-    title: "Trends",
-    to: "/trends",
+    title: "Tecnologias",
+    to: "/tecnologias",
     icon: <TrendingUp className="h-4 w-4" />,
-    page: <div>Trends Page</div>,
+    page: <div>Tecnologias e Tendências</div>,
   },
   {
     title: "Blog",
     to: "/blog",
     icon: <BookOpen className="h-4 w-4" />,
-    page: <div>Blog Page</div>,
+    page: <div>Blog ATS Conect</div>,
   },
   {
-    title: "Contact",
-    to: "/contact",
+    title: "Contato",
+    to: "/contato",
     icon: <Mail className="h-4 w-4" />,
-    page: <div>Contact Page</div>,
+    page: <div>Entre em Contato</div>,
   },
 ];
